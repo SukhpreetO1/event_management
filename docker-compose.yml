@@ -6,17 +6,17 @@ services:
     container_name: event_pg
     restart: always
     environment:
-      POSTGRES_DB: event_mgmt
+      POSTGRES_DB: event_management
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
   backend:
     build:
-      context: /var/www/html/personal/event_management/backend
+      context: ./backend
       dockerfile: Dockerfile
     container_name: event_backend
     restart: always
@@ -24,7 +24,7 @@ services:
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_DATABASE: event_mgmt
+      DB_DATABASE: event_management
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
     depends_on:
@@ -32,24 +32,24 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /var/www/html/personal/event_management/backend:/var/www/html
-      - /var/www/html/personal/event_management/backend/vendor:/var/www/html/vendor
-      - /var/www/html/personal/event_management/backend/storage:/var/www/html/storage
-      - /var/www/html/personal/event_management/backend/bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./backend:/var/www/html
+      - ./backend/vendor:/var/www/html/vendor
+      - ./backend/storage:/var/www/html/storage
+      - ./backend/bootstrap/cache:/var/www/html/bootstrap/cache
 
   frontend:
     build:
-      context: /var/www/html/personal/event_management/frontend
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: event_frontend
     restart: always
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
+    ports:
+      - "3000:3000"
     volumes:
-      - /var/www/html/personal/event_management/frontend:/app
-      - /var/www/html/personal/event_management/frontend/node_modules:/app/node_modules
+      - ./frontend:/app
+      - ./frontend/node_modules:/app/node_modules
 
 volumes:
   pgdata:
