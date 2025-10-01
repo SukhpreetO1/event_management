@@ -2,8 +2,9 @@
     Event Management
 
 ## Project Start Commands
-    cd /var/www/html/personal/event_management
+    cd /var/www/html/personal
     git clone https://github.com/SukhpreetO1/event_management.git
+    cd event_management
 
     Run Docker Compose:
         docker-compose up -d --build
